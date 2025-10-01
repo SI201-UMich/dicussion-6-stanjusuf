@@ -63,7 +63,7 @@ class PollReader():
             # map each part of the row to the correct column
             self.data_dict['month'].append(seperated[0])
             self.data_dict['date'].append(int(seperated[1]))
-            self.data_dict['sample'].append(seperated[2].split(' ')[0])
+            self.data_dict['sample'].append(int(seperated[2].split(' ')[0]))
             self.data_dict['sample type'].append(seperated[2].split(' ')[1])
             self.data_dict['Harris result'].append(float(seperated[3]))
             self.data_dict['Trump result'].append(float(seperated[4]))
@@ -81,11 +81,11 @@ class PollReader():
              and the highest polling percentage.
         """
         if max(self.data_dict['Harris result']) > max(self.data_dict['Trump result']):
-            return f"Harris {max(self.data_dict['Harris result']) * 100:.1f}"
+            return f"Harris {max(self.data_dict['Harris result']) * 100:.1f}%"
         elif max(self.data_dict['Harris result']) == max(self.data_dict['Trump result']):
-            return "EVEN {max(self.data_dict['Harris result']) * 100:.1f}"
+            return f"EVEN {max(self.data_dict['Harris result']) * 100:.1f}%"
         else:
-            return f"Trump {max(self.data_dict['Trump result']) * 100:.1f}"
+            return f"Trump {max(self.data_dict['Trump result']) * 100:.1f}%"
         
         
 
@@ -106,7 +106,7 @@ class PollReader():
                 harris_sum += self.data_dict['Harris result'][i]
                 count += 1
         if count > 0:
-            return (trump_sum / count, harris_sum / count)
+            return ((harris_sum / count), (trump_sum / count))
         else:
             return (0.0, 0.0)
         
@@ -122,7 +122,13 @@ class PollReader():
             tuple: A tuple containing the net change for Harris and Trump, in that order.
                    Positive values indicate an increase, negative values indicate a decrease.
         """
-        pass
+        early_harris = sum(self.data_dict['Harris result'][-30:]) / 30
+        early_trump = sum(self.data_dict['Trump result'][-30:]) / 30
+
+        late_harris = sum(self.data_dict['Harris result'][:30]) / 30
+        late_trump = sum(self.data_dict['Trump result'][:30]) / 30
+
+        return ((late_harris - early_harris), (late_trump - early_trump))
 
 
 class TestPollReader(unittest.TestCase):
