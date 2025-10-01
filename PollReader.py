@@ -1,3 +1,8 @@
+# Author: Stanford Jusuf
+# Date: 10/01/2025
+# Class: SI201 Discussion 6
+# Usage: csv files
+
 import os
 import unittest
 
@@ -42,6 +47,7 @@ class PollReader():
             'Harris result': [],
             'Trump result': []
         }
+
 
     def build_data_dict(self):
         """
@@ -88,7 +94,6 @@ class PollReader():
             return f"Trump {max(self.data_dict['Trump result']) * 100:.1f}%"
         
         
-
     def likely_voter_polling_average(self):
         """
         Calculate the average polling percentage for each candidate among likely voters.
